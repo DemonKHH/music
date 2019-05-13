@@ -3,11 +3,11 @@
     <div class="nav">
       <ul class="nav-header">
         <li><router-link  to="/home/album">FEATURED</router-link></li>
-        <li><router-link  to="/home/newalbum">PODCASTS</router-link></li>
         <li><router-link  to="/home/hotalbum">CHARTS</router-link></li>
+        <li><router-link  to="/home/newalbum">PODCASTS</router-link></li>
         <li><router-link  to="/home/3">MOODS</router-link></li>
         <li><router-link  to="/home/4">NEW RELEASES</router-link></li>
-        <li><router-link  to="/home/5">DISCOVER</router-link></li>
+        <li><router-link  to="/home/lyric">Lyrics</router-link></li>
       </ul>
     </div>
     <div class="nav-body">
@@ -43,6 +43,7 @@ Mounted () {
     left:15%;
     width:85%;
     height:100%;
+    padding-bottom: 200px;
     background-color:rgba(255, 255, 255, 0.781);
   }
   .nav{
@@ -53,6 +54,9 @@ Mounted () {
     height:100%;
     width:85%;
   }
+  .nav-body{
+  padding-bottom: 60px;
+}
   .nav-header li{
     display: inline-block;
     padding:20px 20px 0 20px;

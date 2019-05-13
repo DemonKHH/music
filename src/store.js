@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
+      loginstatus:'未登录',
       id:'',
       playingName:'',
       historylists:[]
@@ -13,6 +14,9 @@ export default new Vuex.Store({
     },
     getPlaylistTitle(state){
       return state.playingName;
+    },
+    getLoginstatus(state){
+      return state.loginstatus;
     }
 },
 actions:{
@@ -21,6 +25,9 @@ actions:{
   },
   setPlaylistTitle({commit,state}, playingName){
     commit("getPlaylistTitle", playingName);
+},
+setLoginstatus({commit,state},loginstatus){
+  commit("getLoginstatus", loginstatus);  
 }
 
 },
@@ -30,6 +37,10 @@ mutations:{
   },
   getPlaylistTitle(state, playLoad){
     state.playingName = playLoad;
+}
+,    
+getLoginstatus(state,playLoad){
+  state.loginstatus = playLoad;
 }
 }
 })

@@ -23,12 +23,16 @@ export default new Router({
         {
           path:'/home/hotalbum',
           component: ()=>import('./views/album/Hotalbum.vue')
+        },
+        {
+          path:'/home/lyric',
+          component: ()=>import('./views/lyric/Lyric.vue')
         }
       ]
     },
     {
-      path: '/about',
-      component: () => import('./views/About.vue')
+      path: '/login',
+      component: () => import('./views/login/Login.vue')
     },
     {
       path: '/search',

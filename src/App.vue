@@ -45,8 +45,8 @@
         </div>
       </div>
       <div id="login">
-      <router-link tag="button" to="/login">Login</router-link>
-      <button @click="neteaseCloudLogin">Netease Cloud</button>
+      <router-link tag="button" to="/login" v-if="loginshow">login</router-link>
+      <button @click="neteaseCloudLogin" v-if="loginshow">Netease Cloud</button>
       </div>
     </div>
     <diV class="playlistpage">
@@ -54,7 +54,7 @@
     </diV>
     <div class="box">
       <div class="playcontrol">
-          <div class="previous">
+          <div class="previous" @click="previous">
               <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-back"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
           </div>
           <div class="play" v-show="bool" @click="cpause">
@@ -63,7 +63,7 @@
           <div class="pause" v-show="!bool"  @click="cplay">
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play-circle"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
           </div>
-          <div class="next">
+          <div class="next" @click="next">
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-forward"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
           </div>
       </div>
@@ -82,7 +82,10 @@
             </div>
 
         </div>
-        <audio @canplay="getDuration" @timeupdate="updateTime" id="player"></audio>
+        <div class="lyrics">
+        <router-link to="/home/lyric"><p class="lyric">{{timeLyric}}</p></router-link>
+        </div>
+        <audio autoplay="autoplay" @canplay="getDuration" @timeupdate="updateTime" id="player"></audio>
     </div>
   </div>
 </template>
@@ -94,22 +97,26 @@ data: function () {
     duration:'00:00',
     currentTime:'00:00',
     count:0,
-    name:'歌曲',
+    name:'',
     playlist:{},
-    bool:false
+    bool:false,
+    num:0,
+    loginshow:true,
+    lyrics:'',
+    lyric:'',
+    timeLyric:'',
   }
 },
 methods: {
     cplay(){
-          if(this.$store.getters.getSongId==''){
+    if(this.$store.getters.getSongId==''){
       alert('还没有点击歌曲哦')
     }else{
           var audio = document.getElementById('player');
-        if(this.bool==false){
-              this.bool=!this.bool;
-        }
-      audio.play();
-      // console.log('开始播放');
+          if(this.bool==false){
+                this.bool=!this.bool;
+          }    
+          // audio.play();
     }
 
   },
@@ -118,18 +125,21 @@ methods: {
         if(this.bool==true){
               this.bool=!this.bool;
         }
-        console.log(audio.error)
         audio.pause();
             // console.log('停止播放')
   },
   neteaseCloudLogin(){
     console.info("网易云登陆")
   },
-  audioplay(){
+  audioplay(id){
+      var songId= id || this.$store.getters.getSongId;
       var audio = document.getElementById('player');
-      audio.src = `https://api.itooi.cn/music/netease/url?key=579621905&id=${this.$store.getters.getSongId}&br=999000`
+      this.$http.get(`http://music.api.umcoder.com/song/url?id=${songId}`)
+      .then(res=>{
+            // console.log(res)
+             audio.src = res.data.data[0].url
+      })
       this.cplay()
-
   },
       getDuration(e) {
       //  console.log(e.target.duration); //此时可以获取到duration
@@ -139,10 +149,17 @@ methods: {
     updateTime(e) {
        this.currentTime =this.timeToStr(e.target.currentTime.toFixed(0));  //获取audio当前播放时间
       this.changeProgress(e.target.currentTime.toFixed(0),e.target.duration.toFixed(0));
-      this.audioSatus()
+      this.audioSatus();
+      for (var i = 0; i < this.lyric.length; i++) {
+        if (e.target.currentTime /*当前播放的时间*/ > this.lyric[i][0]) {
+            //显示到页面
+            this.timeLyric = this.lyric[i][1];
+            // console.log(this.timeLyric)
+        };
+      };
     },
     changeProgress(cur,dur){
-              var cprogress= document.getElementsByClassName('cprogress')[0];
+            var cprogress= document.getElementsByClassName('cprogress')[0];
             cprogress.style.width = cur/dur*100+"%"
             },
     timeToStr(time) {
@@ -164,7 +181,7 @@ methods: {
                      this.currentTime='00:00'
                      var cprogress= document.getElementsByClassName('cprogress')[0];
                      cprogress.style.width=0; 
-                     this.cpause()
+                     this.cpause() 
               }
       },
      addVolume(){
@@ -180,8 +197,84 @@ methods: {
             audio.volume -=0.2;           
         else
             alert('顶不住啦')  
-      }
+      },
+      previous(){
+        if(this.num==0){
+            this.num  = this.count-1;
+            this.name = this.$store.state.historylists[this.num].name;
+            this.audioplay(this.$store.state.historylists[this.num].id)
+            return;
+          }
+       else if(this.num>0){
+         if(this.num==this.count){
+           --this.num;
+         }
+          --this.num;
+        this.name = this.$store.state.historylists[this.num].name;        
+        this.audioplay(this.$store.state.historylists[this.num].id)
+        }
 
+      },
+      next(){
+        if(this.num==this.count-1){  
+        this.num=0;
+        this.name = this.$store.state.historylists[this.num].name;
+        this.audioplay(this.$store.state.historylists[this.num].id)
+        }else{  
+        ++this.num;
+        this.name = this.$store.state.historylists[this.num].name;
+        this.audioplay(this.$store.state.historylists[this.num].id)
+        }
+                // console.log(this.num)
+      },
+    getLyrics(){
+            this.$http.get(`http://music.api.umcoder.com/lyric?id=${this.$store.state.id}`)
+            .then(res=>{
+                // console.log(res);
+                // console.log(res.data)
+                this.lyrics=res.data.lrc.lyric
+                this.parseLyric(this.lyrics)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+      },
+      parseLyric(text) {
+        // console.log(text)
+    //将文本分隔成一行一行，存入数组
+    var lines = text.split('\n'),
+        //用于匹配时间的正则表达式，匹配的结果类似[xx:xx.xx]
+        pattern = /\[\d{2}:\d{2}.\d{2}\d{0}]|\[\d{2}:\d{2}.\d{2}\d{1}]/g,
+
+        //保存最终结果的数组
+        result = [];
+    //去掉不含时间的行
+    // while (!pattern.test(lines[0])) {
+    //     lines = lines.slice(1);
+    // };
+    //上面用'\n'生成生成数组时，结果中最后一个为空元素，这里将去掉
+    lines[lines.length - 1].length === 0 && lines.pop();
+    lines.forEach(function(v /*数组元素值*/ , i /*元素索引*/ , a /*数组本身*/ ) {
+        //提取出时间[xx:xx.xx]
+        var time = v.match(pattern),
+            //提取歌词
+            value = v.replace(pattern, '');
+        // 因为一行里面可能有多个时间，所以time有可能是[xx:xx.xx][xx:xx.xx][xx:xx.xx]的形式，需要进一步分隔
+        if(time!==null){
+                  time.forEach(function(v1, i1, a1) {
+            //去掉时间里的中括号得到xx:xx.xx
+            var t = v1.slice(1, -1).split(':');
+            //将结果压入最终数组
+            result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]), value]);
+        });
+        }
+    });
+    //最后将结果数组中的元素按时间大小排序，以便保存之后正常显示歌词
+    result.sort(function(a, b) {
+        return a[0] - b[0];
+    });
+    this.lyric=result;
+  }
 },
 beforeMount () {
   console.log(`^_^^_^^_^^_^^_^`)
@@ -194,40 +287,49 @@ beforeMount () {
       console.log(`ctrl+↑ || ctrl+↓ 控制音量加减`)
   console.log(`^_^^_^^_^^_^^_^`)
 
-
 },
+mounted(){
+              var app = document.querySelector('#app');
+              app.style.display='none'
+              try {
+                        setTimeout(()=>{
+                        document.body.removeChild(document.getElementById('loadingContainer'))
+                        app.style.display='block'
+                        }, 1000)
+                      } catch (e) {
+                          console.log(e)
+                      }
+    }
+,
 watch:{   
           getSongId(curval,oldval){ 
             this.$store.state.historylists.push({id:`${this.$store.state.id}`,name:`${this.$store.state.playingName}`})
-            this.changeProgress()
-            // console.log(this.historylists[this.count][0]);
-            // this.historylists[this.count].push([{id:oldval}])
-            // console.log(`新id值${curval}--旧id值${oldval}`);
-            // console.log(this.count);
-            // console.log(this.historylists[this.count][0].name);
             this.count++;
+            this.changeProgress()
             this.audioplay();
+            this.getLyrics();
           },
            getPlaylistTitle(curval,oldval){ 
              this.name = curval;
             // this.historylists[this.count].push([{name:oldval}])
             // console.log(`新歌名${curval}--旧歌名${oldval}`);
-          }
-
+          }, 
+          getLoginstatus(curval,oldval){
+                      // console.log(curval,oldval)
+                      this.loginshow=false
+                      var login =document.getElementById('login');
+                      var p=document.createElement('p');
+                      p.innerHTML=`当前用户${this.$store.state.loginstatus}`
+                      login.append(p);
+          },
 
 },
 computed:{    
             ...mapGetters([
               'getSongId',
               'getPlaylistTitle',
+              'getLoginstatus'
             ])  
-          // getorderid(){
-          //   return this.$store.state.id;
-          // },
-          // getordername(){
-          //   return this.$store.state.playingName;
-          // }
-
 }
   }
 </script>
@@ -328,6 +430,14 @@ button{
   border-radius:100%;
   cursor: pointer;
 }
+.lyrics{
+  position: absolute;
+  top:70%;
+  left:75%;
+  transform:translate(-50%,-50%);
+  height:50px;
+  width:auto;
+}
 .previous{
      left:48%;
 }
@@ -396,5 +506,10 @@ button{
   background-color:rgb(134,176,237);
   border-radius: 10px;
 }
+
+.lyric{
+  color:rgb(99,144,211);
+}
+
 
 </style>

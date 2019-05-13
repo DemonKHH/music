@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>caculator</title>
+</head>
+<body>
+    <input type="text" required name="num1"></input>
+    <input type="text" required name="num2"></input>
+    <button  onclick="cacu('/login')">登陆</button>
+    <button  onclick="cacu('/logout')">登陆</button>
+    <script>
+         var time=0;
+        function cacu(url){
+            var num1 = document.getElementsByTagName('input')[0].value
+            var num2 = document.getElementsByTagName('input')[1].value
+            var xhr = new XMLHttpRequest();
+            var num = {num1:num1,num2:num2}
+            xhr.open('POST',url);
+            xhr.setRequestHeader("Content-Type","application/json","charset=UTF-8")
+            xhr.send(JSON.stringify(num))
+            xhr.onreadystatechange = function(){
+                if(this.readyState==4 && this.status==200)
+                {   
+                    console.log(this)
+                    time++;
+                    var div = document.createElement('div');
+                    var timer = document.createElement('p');
+                    timer.innerHTML=`这是第${time}次登陆`;
+                    var p = document.createElement('p');
+                    p.innerHTML=this.responseText;
+                    document.body.appendChild(div);
+                    div.appendChild(timer);
+                    div.appendChild(p);
+                }
+            }
+        }
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#config-web-app -->
+    
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyAj1AW6PnBnDZkho-czTjEAFgKJbK9Yk-E",
+        authDomain: "fir-1a23d.firebaseapp.com",
+        databaseURL: "https://fir-1a23d.firebaseio.com",
+        projectId: "fir-1a23d",
+        storageBucket: "fir-1a23d.appspot.com",
+        messagingSenderId: "800566132908",
+        appId: "1:800566132908:web:ea6e570be7fa7b80"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
+</body>
+</html>
