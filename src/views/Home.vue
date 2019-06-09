@@ -1,84 +1,158 @@
 <template>
   <div class="home">
-    <div class="nav">
-      <ul class="nav-header">
-        <li><router-link  to="/home/album">FEATURED</router-link></li>
-        <li><router-link  to="/home/hotalbum">CHARTS</router-link></li>
-        <li><router-link  to="/home/newalbum">PODCASTS</router-link></li>
-        <li><router-link  to="/home/3">MOODS</router-link></li>
-        <li><router-link  to="/home/4">NEW RELEASES</router-link></li>
-        <li><router-link  to="/home/lyric">Lyrics</router-link></li>
-      </ul>
-    </div>
-    <div class="nav-body">
-      <router-view></router-view>
-    </div>
+      <div class="homeContentHotAlbum">
+        <h1>{{hotAlbumTitle || "waiting"}}</h1>
+        <div class="albumImgs">
+          <div class="albumImg" v-for="hotAlbum in hotAlbums" @click="album(hotAlbum.id)">
+            <img :src="hotAlbum.coverImgUrl.replace('http','https')">
+            <div class="playSvg">
+              <svg data-v-7ba5bd90="" width="48" height="48" xmlns="http://www.w3.org/2000/svg"><g data-v-7ba5bd90=""><title data-v-7ba5bd90="">background</title><rect data-v-7ba5bd90="" fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"></rect></g><g data-v-7ba5bd90=""><title data-v-7ba5bd90="">play</title><rect data-v-7ba5bd90="" id="svg_3" height="23.269886" width="23.529401" y="12.671068" x="13.662634" stroke-width="1.5" stroke="#000" fill="#fff"></rect><path data-v-7ba5bd90="" id="svg_1" fill="none" d="m0,0l48,0l0,48l-48,0l0,-48z"></path><path data-v-7ba5bd90="" fill="#e82359" stroke-width="0" id="svg_2" d="m24,3.910474c-11.05,0 -20,8.95 -20,20s8.95,20 20,20s20,-8.95 20,-20s-8.95,-20 -20,-20zm-4,29l0,-18l12,9l-12,9z"></path></g></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="homeContentNewAlbum">
+        <h1>{{newAlbumTitle || "waiting"}}</h1>
+        <div class="albumImgs">
+          <div class="albumImg" v-for="newAlbum in newAlbums" @click="album(newAlbum.id)">
+            <img :src="newAlbum.coverImgUrl.replace('http','https')">
+            <div class="playSvg">
+              <svg data-v-7ba5bd90="" width="48" height="48" xmlns="http://www.w3.org/2000/svg"><g data-v-7ba5bd90=""><title data-v-7ba5bd90="">background</title><rect data-v-7ba5bd90="" fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"></rect></g><g data-v-7ba5bd90=""><title data-v-7ba5bd90="">play</title><rect data-v-7ba5bd90="" id="svg_3" height="23.269886" width="23.529401" y="12.671068" x="13.662634" stroke-width="1.5" stroke="#000" fill="#fff"></rect><path data-v-7ba5bd90="" id="svg_1" fill="none" d="m0,0l48,0l0,48l-48,0l0,-48z"></path><path data-v-7ba5bd90="" fill="#e82359" stroke-width="0" id="svg_2" d="m24,3.910474c-11.05,0 -20,8.95 -20,20s8.95,20 20,20s20,-8.95 20,-20s-8.95,-20 -20,-20zm-4,29l0,-18l12,9l-12,9z"></path></g></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="homeContentTopAlbum">
+        <h1>Top Songs</h1>
+        <div class="albumImgs">
+          <div class="albumImg" v-for="topAlbum in topAlbums">
+            <img :src="topAlbum.coverImgUrl">
+          </div>
+        </div>
+      </div> -->
   </div>
-
 </template>
 
 <script>
 // @ is an alias to /src
-import {props} from '../App.vue'
+import axiosLoading from '../assets/common/axiosLoading.js'
 export default {
 data () {
   return {
-
+    hotAlbumTitle:'',
+    hotAlbums:[],
+    newAlbumTitle:'',
+    newAlbums:[],
+    topSongs:[],
   }
 },
-method:{
-  gethistory(){
-    console.log(props)
-  }
+  methods: {
+    album(id){
+      this.$router.push({
+              name: 'album',
+              params: {
+               id: id
+              }
+            })
+      this.$store.state.albumId =id;
+    },
+   hotAlbum(){
+     var requrl= '/top/playlist/highquality?limit=4';
+     axiosLoading(this.$http,requrl,res=>{
+                // console.log(res.data)
+                this.hotAlbumTitle='Highquality';
+                this.hotAlbums = res.data.playlists;
+     })
+    
+      },
+   newAlbum(){
+     var requrl= '/top/playlist?limit=4&order=new';
+     axiosLoading(this.$http,requrl,res=>{
+                this.newAlbumTitle='News';
+                this.newAlbums = res.data.playlists;
+     })
+    
+      },
+       topAlbum(){
+     var requrl= '/top/song?limit=10&type=0';
+     axiosLoading(this.$http,requrl,res=>{
+                this.topSongs = res.data;
+                // console.log(this.topSongs)
+     })
+    
+      }
 },
-Mounted () {
-  this.gethistory();
+beforeMount () {
+  this.hotAlbum();
+  this.newAlbum();
+  this.topAlbum();
 }
-
 }
 </script>
 <style scoped>
+img{
+  height:100%;
+  width:100%;
+  border-radius:10px 10px 10px 10px;
+  box-shadow: 6px 8px 2px #171b1c;
+  cursor: pointer;
+}
+h1{
+  text-align: left;
+  margin:10px;
+}
   .home{
-    position: absolute;
-    left:15%;
-    width:85%;
+    display:flex;
+    flex-direction:column;
+    vertical-align: center; 
+    align-items: center;
+    margin-bottom:50%;
+    width:100%;
     height:100%;
-    padding-bottom: 200px;
-    background-color:rgba(255, 255, 255, 0.781);
   }
-  .nav{
-    height:15%;
+  .homeContentHotAlbum,
+  .homeContentNewAlbum,
+  .homeContentTopAlbum{
+    height:100%;
+    width:100%;
+    margin:10px;
+  }
+  .albumImgs{
+    width:100%;
+    display:flex;
+    flex-direction:row;
+    vertical-align: center; 
+    align-items: center;
+  }
+  .albumImgs .albumImg{
+    height:100%;
+    width:100%;
+    padding:10px;
+    transition:0.4s;
+  }
+  .playSvg{
+    /* position: absolute; */
+    height:50px;
+    width:100%;
+    margin-top:-50px;
+    display: flex;
+    flex-direction: row-reverse;
+  }
+   .playSvg svg{
+     height:0;
+     width:0;
+     transition: 0.4s;
+   }
+  .albumImgs .albumImg:hover img{
+    opacity: 0.5;
+  }
+ .homeContentHotAlbum .albumImgs .albumImg:hover .playSvg svg{
+    height:100%;
     width:100%;
   }
-  .nav-header{
+  .homeContentNewAlbum .albumImgs .albumImg:hover .playSvg svg{
     height:100%;
-    width:85%;
+    width:100%;
   }
-  .nav-body{
-  padding-bottom: 60px;
-}
-  .nav-header li{
-    display: inline-block;
-    padding:20px 20px 0 20px;
-    height:40%;
-    line-height: 40px;
-  }
-.nav-header a.router-link-exact-active {
-  color: #000;
-}
-a:hover {
-  color: rgb(37, 5, 5);
-}
-.nav-header li a.router-link-exact-active::before{
-  content:'';
-  display:inline-block;
-  position: absolute;
-  top:60px;
-  height:0.6%;
-  /* margin-left:1px; */
-  width:80px;
-  background-color:rgb(134,176,237);
-}
-
 </style>
 

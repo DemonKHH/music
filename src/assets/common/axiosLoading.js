@@ -1,6 +1,6 @@
 let axiosLoading=function (axios,requrl,callback){
     var axiosCreate = axios.create({
-        baseURL :'http://music.api.umcoder.com',
+        baseURL :'https://music.api.umcoder.com',
         timeout:5000
     })
     axiosCreate.interceptors.request.use(config=>{

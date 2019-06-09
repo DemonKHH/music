@@ -1,10 +1,10 @@
 <template>
-<div class="searchBox">
+<div class="searchBox" @click="search()">
     <div class="artists">
         <h1>Artists</h1>
         <div class="content">
             <div class="artist">
-                <img :src="artUrl" alt="">
+                <img :src="artists.replace('http','https')" alt="">
             </div>
         </div>
     </div>
@@ -12,22 +12,22 @@
         <h1>Songs</h1>
         <div class="content" v-for="song in songs">
             <div class="contentImg">
-                <img :src="song.album.artist.img1v1Url" alt="">
+                <img :src="song.al.picUrl.replace('http','https')" alt="">
             </div>
             <div class="contentSongs">
-                <div class="songNames" @click="getSongId(song.id,song.name,song.artists[0].name,song.album.name,song.album.artist.img1v1Url)">
-                    <p>{{song.name}}</p>
+                <div class="songNames" @click="getSongId(song.id,song.name,song.ar[0].name,song.al.picUrl)">
+                    <p>{{song.name||"songName"}}</p>
                 </div>
                 <div class="singerNames">
-                    <p>{{song.artists[0].name}}</p>
+                    <p>{{song.ar[0].name||"songName"}}</p>
                 </div>
             </div>
-            <div class="albumNames">
-                <p>{{song.album.name}}</p>
+            <!-- <div class="albumNames">
+                <p>{{song.album.name ||"albumName"}}</p>
             </div>
             <div class="songTime">
                 <p>00:00</p>
-            </div>
+            </div> -->
         </div>
     </div>
     <!-- <div class="albums">
@@ -40,22 +40,20 @@ import { mapGetters } from 'vuex'
 export default{
 data(){
         return {
-           artists:[],
+           artists:"",
            songs:[],
-           albums:[],
-           artUrl:'',
+           albums:[]
         }
     },
 methods:{
-getSongId(id,name,singer,album,albumImgUrl){
+getSongId(id,name,singer,albumImgUrl){
     this.$store.state.id=id;
     this.$store.state.songName=name;
     this.$store.state.singer=singer;
-    this.$store.state.albumName=album;
     this.$store.state.albumImgUrl=albumImgUrl;
     },
-search(words){
-  var q=words || this.$router.currentRoute.params.words;
+search(albumId){
+var id=albumId || this.$router.currentRoute.params.id;
   var axios = this.$http
   var axiosCreate =  axios.create({
       baseURL :'https://music.api.umcoder.com',
@@ -81,43 +79,43 @@ axiosCreate.interceptors.response.use(response => {
   //请求错误时做些事
   return Promise.reject(error)
 })
-axiosCreate.get(`/search?keywords=${q}&limit=40`)
+axiosCreate.get(`/playlist/detail?id=${id}`)
             .then(res=>{
             if(res.status== 200){
-              // console.log(res) 
-              this.songs=res.data.result.songs;
-              this.artists=res.data.result.songs;
-              this.albums=res.data.result.songs;
-              this.artUrl=res.data.result.songs[0].album.artist.img1v1Url;
+            //   console.log(res.data.playlist.tracks);
+              this.songs=res.data.playlist.tracks;
+              this.artists=res.data.playlist.coverImgUrl;
+              this.albums=res.data.playlist.tracks;
+              // console.log(this.songs,this.artists,this.albums);
             }
         }).catch(err=>{
               console.log(err)
             })
 },
-    select(ele){
-      return document.querySelector(ele)
-    },
-    rplay(id,name){
-        this.$store.dispatch('setSongId',id)
-        this.$store.dispatch('setPlaylistTitle',name)
-    }
+    // select(ele){
+    //   return document.querySelector(ele)
+    // },
+    // rplay(id,name){
+    //     this.$store.dispatch('setSongId',id)
+    //     this.$store.dispatch('setPlaylistTitle',name)
+    // }
     },
     watch:{   
-        getSearchWords(curval,oldval){
-          // console.log(curval,oldval)
-          if(!curval)
-          this.search(oldval);
-          else
-          this.search(curval);
+        getAlbumId(curval,oldval){
+            console.log(curval,oldval)
+        if(!curval)
+        this.search(oldval);
+        else
+        this.search(curval);
         }
 },
 computed:{    
             ...mapGetters([
-              'getSearchWords'
+              'getAlbumId'
             ])  
 },
 beforeMount(){
-  this.search(this.$store.state.searchWords);
+  this.search(this.$store.state.albumId);
 }
 
 }
@@ -186,34 +184,27 @@ h1{
       transition: 0.2s;
       padding:10px 0;
   }
-.songs .content .contentSongs,
-.songs .content  .albumNames,
-.songs .content  .songTime{
+.songs .content .contentSongs{
     display: flex;
     vertical-align: center;
     align-items:center;
-    width:45%;
+    width:100%;
     margin:auto;
-    margin:10px;
-    overflow: hidden;
-    text-align: left;
-} 
-.songs .content .contentSongs .songNames{
-  width:70%;
-} 
-.songs .content  .songTime{
-  width:20%;
+    text-align:left;
 }
-.songs .content .contentImg{
+.songs .content .contentSongs .songNames{
+  width:50%;
+}
+  .songs .content .contentImg{
     height:50px;
-    width:80px;
+    width:50px;
   }
+.songs .content .contentImg img{
+      border-radius: 1px;
+        box-shadow: 1px 1px 5px black;
+    }
   .contentImg{
     margin-right:20px;
-  }
-  .contentImg img{
-    border-radius: 1px;
-      box-shadow: 1px 1px 5px black;
   }
   .songs .content:hover{
       background:rgb(30,52,76);
@@ -221,13 +212,8 @@ h1{
 .songs .content p{
     cursor: pointer;
 }
-.albumNames{
-  /* margin-right:100px; */
-  width:200px;
-}
-.songs .content .contentSongs .albumNames{
-  margin:auto;
-}
+
+
 </style>
 
 

@@ -6,7 +6,13 @@ export default new Vuex.Store({
       loginstatus:'未登录',
       id:'',
       playingName:'',
-      historylists:[]
+      songName:'',
+      singer:'',
+      albumName:'',
+      historylists:[],
+      searchWords:'',
+      albumId:'',
+      albumImgUrl:'',
   },
   getters:{
     getSongId(state){
@@ -17,7 +23,13 @@ export default new Vuex.Store({
     },
     getLoginstatus(state){
       return state.loginstatus;
-    }
+    },
+    getSearchWords(state){
+      return state.searchWords;
+    },
+    getAlbumId(state){
+      return state.albumId;
+  },
 },
 actions:{
   setSongId({commit,state}, id){
@@ -28,8 +40,13 @@ actions:{
 },
 setLoginstatus({commit,state},loginstatus){
   commit("getLoginstatus", loginstatus);  
+},
+setSearchWords({commit,state},searchWords){
+  commit("getSearchWords", searchWords);  
+},
+setAlbumId({commit,state},albumId){
+  commit("getSearchWords", albumId);  
 }
-
 },
 mutations:{
   getSongId(state, playLoad){
@@ -41,6 +58,12 @@ mutations:{
 ,    
 getLoginstatus(state,playLoad){
   state.loginstatus = playLoad;
-}
+},
+getSearchWords(state,playLoad){
+  state.searchWords = playLoad
+},
+getAlbumId(state,playLoad){
+  state.albumId = playLoad
+},
 }
 })
