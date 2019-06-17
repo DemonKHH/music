@@ -4,7 +4,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
       loginstatus:'未登录',
-      id:'',
+      id:6,
       playingName:'',
       songName:'',
       singer:'',
@@ -13,6 +13,7 @@ export default new Vuex.Store({
       searchWords:'',
       albumId:'',
       albumImgUrl:'',
+      uid:''
   },
   getters:{
     getSongId(state){

@@ -24,6 +24,11 @@ export default new Router({
       component: ()=>import('./views/Search.vue')
     },
     {
+      path:'/userlist/:id',
+      name:'userlist',
+      component: ()=>import('./views/List.vue'),
+    },
+    {
       path:"*",component: () => import('./views/Home.vue')
     }
 

@@ -1,7 +1,7 @@
 let axiosLoading=function (axios,requrl,callback){
     var axiosCreate = axios.create({
         baseURL :'https://music.api.umcoder.com',
-        timeout:5000
+        timeout:10000
     })
     axiosCreate.interceptors.request.use(config=>{
        return config
@@ -10,23 +10,23 @@ let axiosLoading=function (axios,requrl,callback){
     })
     axiosCreate.interceptors.response.use(response => {
         //对响应数据做些事，比如说把loading动画关掉
-        setTimeout(()=>{
-          var loadingAll = document.getElementsByClassName('loading')
-          var imgAll =document.getElementsByClassName('imgAll')
-          for(let i=0;i<imgAll.length;i++){
-            if(imgAll[i].complete) {
-              loadingAll[i].style.display='none'
-              imgAll[i].style.display='block'
-              // console.log('该图片已经存在于缓存之中，不会再去重新下载');
-          }else{
-              imgAll[i].onload =()=> {
-              loadingAll[i].style.display='none'
-              // console.log('图片下载成功！');
-              imgAll[i].style.display='block'
-          }
-          } 
-        }       
-        },500)
+        // setTimeout(()=>{
+        //   var loadingAll = document.getElementsByClassName('loading')
+        //   var imgAll =document.getElementsByClassName('imgAll')
+        //   for(let i=0;i<imgAll.length;i++){
+        //     if(imgAll[i].complete) {
+        //       loadingAll[i].style.display='none'
+        //       imgAll[i].style.display='block'
+        //       // console.log('该图片已经存在于缓存之中，不会再去重新下载');
+        //   }else{
+        //       imgAll[i].onload =()=> {
+        //       loadingAll[i].style.display='none'
+        //       // console.log('图片下载成功！');
+        //       imgAll[i].style.display='block'
+        //   }
+        //   } 
+        // }       
+        // },500)
         return response
       }, error => {
         //请求错误时做些事
