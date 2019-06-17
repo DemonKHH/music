@@ -12,13 +12,20 @@
 
 > 5.搜索 
 
+> 6.登录、注册
+
+> 6.移动适配
+
+> 7.pwa桌面应用
+
+> 8.electron生成桌面应用
 
 [项目截图]()
 
 ![首页](https://i.loli.net/2019/06/09/5cfcb2eff41b890231.png)
 ![歌单页](https://i.loli.net/2019/06/09/5cfcb36c2604f27326.png)
 ![歌词页](https://i.loli.net/2019/06/09/5cfcb2eff41b890231.png)
-
+![移动端页面](https://i.loli.net/2019/06/17/5d072e81a2ddb48287.png)
 
 ---
 
@@ -31,16 +38,18 @@
 
 [项目运行](http://localhost:8080)
 
-## Project setup
+## 项目安装依赖
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 项目运行 electron运行
 ```
-npm run serve
+npm run serve  npm run electron:serve
 ```
 
-### Compiles and minifies for production
+### 项目文件打包 electron桌面应用打包
 ```
-npm run build
+npm run build  npm run electron:build
+
+
