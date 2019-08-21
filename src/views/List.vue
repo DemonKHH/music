@@ -51,7 +51,7 @@ export default {
                 // console.log(res);
                 this.playLists = res.data.playlist;
             })
-        }
+        },
     },
     mounted(){
         // console.log(this.$router.currentRoute.params.id)
@@ -107,6 +107,7 @@ img{
 .users .playLists .playListImg p{
         margin-top:10px;
 }
+
 @media screen and (max-width:960px){
 .users .playLists .playListImg{
     height:100px;

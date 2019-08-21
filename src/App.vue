@@ -203,7 +203,8 @@
                 <p>{{name ||""}}</p>
                 <p>{{singer ||""}}</p>
                 <p>{{album ||""}}</p>
-                 <div class="btnBox">
+              </div>
+                               <div class="btnBox">
                   <div class="previous" @click="previous()">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fff"><title>previous</title><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
                     </div>
@@ -240,7 +241,6 @@
                     <div class="next" @click="next()">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fff"><title>next</title><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
                     </div>
-              </div>
               </div>
             </div>
           </div>
@@ -497,6 +497,11 @@
         <button @click="getData(userName,userUid)">Login</button>
       </div>
     </div>
+    <div class="toggleBar" @click="toggleBar">
+        <div class="toggleBarIcon">
+          <svg data-v-62547525="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path data-v-62547525="" fill="#fff" d="M427 234.625H167.296l119.702-119.702L256 85 85 256l171 171 29.922-29.924-118.626-119.701H427v-42.75z"></path></svg>
+        </div>
+    </div>
     <audio id="player" autoplay="autoplay" @canplay="getDuration" @timeupdate="updateTime"></audio>
   </div>
 </template>
@@ -540,6 +545,10 @@ export default {
     }
   },
   methods: {
+    toggleBar(){
+      var playerBar = document.querySelector('.player-bar');
+      playerBar.classList.toggle('togglePlayerBar');
+    },
     toFocus(input) {
       this.issearchActive = true;
     },
@@ -604,8 +613,7 @@ export default {
       );
       var audio = document.querySelector("audio");
       var percentage = e.offsetX / playerControlProgress[1].offsetWidth;
-      audio.currentTime = audio.duration * percentage;
-      // console.log(e.offsetX,playerControlProgress[1].offsetWidth,audio.currentTime);
+      audio.currentTime = parseFloat(audio.duration * percentage);
     },
     home() {
       this.$router.push({
@@ -812,7 +820,7 @@ export default {
           "https"
         );
       }
-      console.log(this.num);
+      // console.log(this.num);
       if (this.num == this.playlists.length-1){
         this.num = 0;
         // console.log('this.num置为0');
@@ -826,7 +834,7 @@ export default {
       this.singer = this.playlists[this.num].singer;
       this.album = this.playlists[this.num].album;
       this.albumImgUrl = this.playlists[this.num].albumImgUrl;
-      console.log(this.playlists[this.num].name,this.playlists);
+      // console.log(this.playlists[this.num].name,this.playlists);
       this.audioplay(
         this.playlists[this.num].id,
         this.name,
@@ -852,7 +860,7 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err);
+         return err
         });
     },
 
@@ -896,12 +904,12 @@ export default {
   },
 
   beforeMount() {
-    console.info("Welcome");
+    console.info("Welcome soulMusic,hava a good time");
   },
 
   watch: {
     getSongId(curval, oldval) {
-      console.log(curval,oldval);
+      // console.log(curval,oldval);
       if (this.$store.state.albumImgUrl.indexOf("https") == -1){
           this.$store.state.albumImgUrl = this.$store.state.albumImgUrl.replace(
           "http",
@@ -1105,6 +1113,7 @@ nav .content .content-logo {
   flex-direction: row;
   vertical-align: center;
   align-items: center;
+  transition:0.4s;
   z-index: 10;
 }
 .player-bar .player-songImg {
@@ -1181,7 +1190,7 @@ nav .content .content-logo {
 }
 
 .player-bar .player-control .playerControl-content .songContent .songName{
-  margin-top: 15px;
+  margin-top: 10px;
 }
 .player-bar .player-control .playerControl-content .songContent .singer,
 .player-bar .player-control .playerControl-content .songContent .songDetalis {
@@ -1429,14 +1438,19 @@ nav .content .content-logo {
       rgba(255, 255, 255, 0) 100%
     );
 }
-.lyricsPage .leftContent .topBox,
- .lyricsPage .leftContent .btnBox{
+.lyricsPage .leftContent .topBox{
   width:100%;
   display: flex;
   flex-direction: column;
   vertical-align: center;
   align-items: center;
   padding:10px;
+}
+.lyricsPage .leftContent .btnBox{
+  display: flex;
+  flex-direction: column;
+  vertical-align: center;
+  align-items: center;
 }
  .lyricsPage .leftContent .btnBox svg{
    margin:5px;
@@ -1782,17 +1796,29 @@ color: #b9b0b0;
 .unactive {
   border: none;
 }
-
-
 .logoShow{
   display: none;
 }
-
+.toggleBar{
+  position: fixed;
+  bottom:30px;
+  right:2%;
+  height:36px;
+  width:36px;
+  cursor: pointer;
+  z-index:10;
+}
+.togglePlayerBar{
+  width:0%;
+}
 @media only screen and (max-width: 767px) {
   .player-bar .player-songImg {
   height: 80px;
   width: 96px;
   cursor: pointer;
+}
+.toggleBar{
+  display:none; 
 }
   .menu .logoShow{
     display:block;

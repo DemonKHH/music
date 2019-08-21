@@ -1,38 +1,38 @@
 <template>
-  <div class="searchBox" @click="search()">
-    <div class="artists">
-      <h2>{{ablumsname}}</h2>
-      <h2>Artists</h2>
-      <div class="Ablum-head-content">
-        <img :src="artists.replace('http','https')" alt>
+  <div class="Box"  @scroll="lazyLoad" ref="lazy">
+      <div class="backIcon" @click="routerBack">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path  fill="#fff" d="M427 234.625H167.296l119.702-119.702L256 85 85 256l171 171 29.922-29.924-118.626-119.701H427v-42.75z"/></svg>  
       </div>
-    </div>
-    <div class="songs">
-      <h2>Songs</h2>
-      <div class="content" v-for="song in songs">
-        <div class="contentImg">
-          <img :src="song.al.picUrl.replace('http','https')" alt>
-        </div>
-        <div class="contentSongs">
-          <div
-            class="songNames"
-            @click="getSongId(song.id,song.name,song.ar[0].name,song.al.picUrl)"
-          >
-            <p>{{song.name||"songName"}}</p>
-          </div>
-          <div class="singerNames">
-            <p>{{song.ar[0].name||"songName"}}</p>
+      <div class="searchBox" @click="search()">
+        <div class="artists">
+          <h2>{{ablumsname}}</h2>
+          <h2>Artists</h2>
+          <div class="Ablum-head-content">
+            <img :src="artists" alt>
           </div>
         </div>
-        <!-- <div class="albumNames">
-                <p>{{song.album.name ||"albumName"}}</p>
+        <div class="songs">
+          <h2>Songs</h2>
+          <div class="content" v-for="song in songs">
+            <div class="contentImg">
+              <img src="../assets/logo.png" :dataSrc="song.al.picUrl.replace('http','https')" alt='资源加载失败'>  
             </div>
-            <div class="songTime">
-                <p>00:00</p>
-        </div>-->
+            <div class="contentSongs">
+              <div
+                class="songNames"
+                @click="getSongId(song.id,song.name,song.ar[0].name,song.al.picUrl)"
+              >
+                <p>{{song.name||"songName"}}</p>
+              </div>
+              <div class="singerNames">
+                <p>{{song.ar[0].name||"songName"}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
   </div>
+
 </template>
 <script>
 import { mapGetters } from "vuex";
@@ -43,9 +43,13 @@ export default {
       songs: [],
       albums: [],
       ablumsname:"",
+      len:0,
     };
   },
   methods: {
+  routerBack(){
+            this.$router.back(-1)
+        },
     getSongId(id, name, singer, albumImgUrl) {
       this.$store.state.id = id;
       this.$store.state.songName = name;
@@ -99,20 +103,44 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err);
+          return err;
         });
+    },
+    debounce(fn){
+          clearTimeout(this.timer);
+          this.timer = setTimeout(() => {
+              fn();
+          }, 1000);
+    },
+    loadImg(){
+      if(this.$refs.lazy){
+              var img = this.$refs.lazy.querySelectorAll('.songs img');
+              var top = document.documentElement.scrollTop + this.$refs.lazy.clientHeight;
+              for(var i = this.len; i < img.length; i++) {
+                if(img[i].parentNode.parentNode.offsetTop <= top) {  // 在可视区内则显示图片
+                    img[i].src = img[i].getAttribute("datasrc");
+                    this.len = i;  
+                }
+                }
+      }
+
+    },
+    lazyLoad(){
+    // 如果上拉距离大于500px则自动加载
+    if(document.documentElement.scrollTop - this.oldScrollTop > 500) {
+        this.loadImg();
+        this.oldScrollTop = document.documentElement.scrollTop;
+    } else if(document.documentElement.scrollTop - this.oldScrollTop < 0) {  // 如果向下拉则不做操作
+        return ;
+    } else {  // 如果向下拉但小于500px则防抖加载
+        this.debounce(this.loadImg);
     }
-    // select(ele){
-    //   return document.querySelector(ele)
-    // },
-    // rplay(id,name){
-    //     this.$store.dispatch('setSongId',id)
-    //     this.$store.dispatch('setPlaylistTitle',name)
-    // }
+    }
+
   },
   watch: {
     getAlbumId(curval, oldval) {
-      console.log(curval, oldval);
+      // console.log(curval, oldval);
       if (!curval) this.search(oldval);
       else this.search(curval);
     }
@@ -122,6 +150,15 @@ export default {
   },
   beforeMount() {
     this.search(this.$store.state.albumId);
+  },
+  mounted(){
+    document.addEventListener('scroll', this.lazyLoad,true)
+    if(this.oldScrollTop === 0){
+      this.lazyLoad()
+    }
+  },
+    destroyed () {
+  document.removeEventListener('scroll', this.lazyLoad)
   }
 };
 </script>
@@ -236,7 +273,12 @@ h2 {
 .homeContentHotAlbum{
   margin:30px 0 10px 0;
 }
-
+.backIcon{
+    height:36px;
+    width:36px;
+    cursor: pointer;
+    margin:0 0 20px 4px;
+}
 @media only screen and (max-width: 767px) {
   h2 {
     text-align: left;

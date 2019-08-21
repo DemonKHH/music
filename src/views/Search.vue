@@ -1,4 +1,8 @@
 <template>
+<div class="Box">
+  <div class="backIcon" @click="routerBack">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path  fill="#fff" d="M427 234.625H167.296l119.702-119.702L256 85 85 256l171 171 29.922-29.924-118.626-119.701H427v-42.75z"/></svg>  
+  </div>
   <div class="searchBox">
     <div class="artists">
       <h2>Artists</h2>
@@ -11,12 +15,12 @@
     <div class="songs">
       <h2>Songs</h2>
       <div class="content" v-for="song in songs">
-        <div
+        <!-- <div
           class="contentImg"
           @click="getSongId(song.id,song.name,song.artists[0].name,song.album.name,song.album.artist.img1v1Url)"
         >
           <img :src="song.album.artist.img1v1Url" alt>
-        </div>
+        </div> -->
         <div class="contentSongs">
           <div
             class="songNames"
@@ -36,10 +40,9 @@
         </div>
       </div>
     </div>
-    <!-- <div class="albums">
-
-    </div>-->
   </div>
+</div>
+
 </template>
 <script>
 import { mapGetters } from "vuex";
@@ -105,7 +108,7 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err);
+          return err;
         });
     },
     select(ele) {
@@ -114,7 +117,11 @@ export default {
     rplay(id, name) {
       this.$store.dispatch("setSongId", id);
       this.$store.dispatch("setPlaylistTitle", name);
+    },
+    routerBack(){
+      this.$router.back(-1);
     }
+
   },
   watch: {
     getSearchWords(curval, oldval) {
@@ -148,8 +155,6 @@ h2 {
   vertical-align: center;
   align-items: center;
   margin-bottom: 50%;
-  width: 100%;
-  height: 100%;
 }
 .artists {
   height: 40%;
@@ -176,8 +181,8 @@ h2 {
   vertical-align: center;
 }
 .contentImg {
-  height: 100%;
-  width: 20px;
+  height:100px;
+  width: 80px;
 }
 .content {
   height: 100%;
@@ -199,6 +204,8 @@ h2 {
   padding: 10px 0px 0px 0px;
 }
 .songs {
+  height:100%;
+  width:100%;
   display: flex;
   flex-direction: column;
 }
@@ -208,7 +215,7 @@ h2 {
   transition: 0.2s;
   line-height: 22px;
   border-bottom: 1px solid #ffffff0a;
-  padding: 5px 0;
+  padding:5px 0;
 }
 .songs .content .contentSongs,
 .songs .content .albumNames,
@@ -229,8 +236,8 @@ h2 {
   width: 20%;
 }
 .songs .content .contentImg {
-  height: 50px;
-  width: 80px;
+  height: 100%;
+  /* width: 80px; */
 }
 .contentImg {
   margin-right: 20px;
@@ -251,6 +258,12 @@ h2 {
 }
 .songs .content .contentSongs .albumNames {
   margin: auto;
+}
+.backIcon{
+    height:36px;
+    width:36px;
+    cursor: pointer;
+    margin:0 0 20px 5px;
 }
 @media screen and (max-width: 767px) {
   .songs .content .contentSongs {

@@ -1,11 +1,11 @@
 <template>
-  <div class="home">
+  <div class="home" @scroll="lazyLoad"   ref="lazy">
     <div class="topAlbum">
       <h1>音乐榜</h1>
       <h2>{{topAlbumTiltle || "waiting"}}</h2>
       <div class="albumImgs" id="m1">
         <div class="albumImg" v-for="topAlbum in topAlbums" @click="album(topAlbum.id)">
-          <img :src="topAlbum.coverImgUrl.replace('http','https')">
+          <img src="../assets/logo.png" :dataSrc="topAlbum.coverImgUrl" alt='资源加载失败'>
           <div class="playSvg">
             <svg data-v-7ba5bd90 width="48" height="48" xmlns="http://www.w3.org/2000/svg">
               <g data-v-7ba5bd90>
@@ -56,7 +56,7 @@
           v-for="recommandAlbum in recommandAlbums"
           @click="album(recommandAlbum.id)"
         >
-          <img :src="recommandAlbum.picUrl">
+          <img src="../assets/logo.png" :dataSrc="recommandAlbum.picUrl" alt='资源加载失败'>
           <div class="cover-text">{{recommandAlbum.name.substring(0,6)+'...'}}</div>
           <div class="playSvg">
             <svg data-v-7ba5bd90 width="48" height="48" xmlns="http://www.w3.org/2000/svg">
@@ -104,7 +104,7 @@
       <h2>{{hotAlbumTitle || "waiting"}}</h2>
       <div class="albumImgs" id="m2">
         <div class="albumImg" v-for="hotAlbum in hotAlbums" @click="album(hotAlbum.id)">
-          <img :src="hotAlbum.coverImgUrl.replace('http','https')">
+          <img src="../assets/logo.png" :dataSrc="hotAlbum.coverImgUrl.replace('http','https')" alt='资源加载失败'>
           <div class="playSvg">
             <svg data-v-7ba5bd90 width="48" height="48" xmlns="http://www.w3.org/2000/svg">
               <g data-v-7ba5bd90>
@@ -151,7 +151,7 @@
       <h2>{{newAlbumTitle || "waiting"}}</h2>
       <div class="albumImgs" id="m3">
         <div class="albumImg" v-for="newAlbum in newAlbums" @click="album(newAlbum.id)">
-          <img :src="newAlbum.coverImgUrl.replace('http','https')">
+          <img src="../assets/logo.png" :dataSrc="newAlbum.coverImgUrl.replace('http','https')" alt='资源加载失败'>
           <div class="playSvg">
             <svg data-v-7ba5bd90 width="48" height="48" xmlns="http://www.w3.org/2000/svg">
               <g data-v-7ba5bd90>
@@ -209,7 +209,9 @@ export default {
       hotAlbums: [],
       newAlbums: [],
       topAlbums: [],
-      recommandAlbums: []
+      recommandAlbums: [],
+      oldScrollTop:0,
+      len:0,
     };
   },
   methods: {
@@ -253,6 +255,35 @@ export default {
         this.recommandAlbums.splice(7);
         // console.log(res);
       });
+    },
+    debounce(fn){
+          clearTimeout(this.timer);
+          this.timer = setTimeout(() => {
+              fn();
+          }, 1000);
+    },
+    loadImg(){
+      if(this.$refs.lazy){
+              var img = this.$refs.lazy.querySelectorAll('.albumImgs img');
+              var top = document.documentElement.scrollTop + this.$refs.lazy.clientHeight;
+                for(var i = this.len; i < img.length; i++) {
+                if(img[i].parentNode.offsetTop <= top) {  // 在可视区内则显示图片
+                    img[i].src = img[i].getAttribute("datasrc");
+                    this.len = i;  
+                }
+                }
+      }
+    },
+    lazyLoad(){
+    // 如果上拉距离大于500px则自动加载
+    if(document.documentElement.scrollTop - this.oldScrollTop > 500) {
+        this.loadImg();
+        this.oldScrollTop = document.documentElement.scrollTop;
+    } else if(document.documentElement.scrollTop - this.oldScrollTop < 0) {  // 如果向下拉则不做操作
+        return ;
+    } else {  // 如果向下拉但小于500px则防抖加载
+        this.debounce(this.loadImg);
+    }
     }
   },
   beforeMount() {
@@ -260,6 +291,15 @@ export default {
     this.newAlbum();
     this.topAlbum();
     this.recommandAlbum();
+  },
+  mounted(){
+    document.addEventListener('scroll', this.lazyLoad,true)
+    if(this.oldScrollTop === 0){
+      this.lazyLoad()
+    }
+  },
+    destroyed () {
+  document.removeEventListener('scroll', this.lazyLoad)
   }
 };
 </script>
