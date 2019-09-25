@@ -8,7 +8,7 @@
           <h2>{{ablumsname}}</h2>
           <h2>Artists</h2>
           <div class="Ablum-head-content">
-            <img :src="artists" alt>
+            <img :src="artists.replace('http','https')" alt>
           </div>
         </div>
         <div class="songs">

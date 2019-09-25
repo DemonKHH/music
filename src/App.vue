@@ -11,7 +11,7 @@
               stroke-miterlimit="10"
               stroke-width="3"
               d="M2 14h60M2 32h36"
-            ></path>
+            />
             <path
               data-name="layer1"
               fill="none"
@@ -19,14 +19,14 @@
               stroke-miterlimit="10"
               stroke-width="3"
               d="M2 50h60"
-            ></path>
+            />
           </svg>
         </div>
         <div class="content-logo">
           <img
             src="https://notre-dame-de-paris-1257401906.cos.ap-chengdu.myqcloud.com/musiclogo.png"
             alt
-          >
+          />
         </div>
         <div class="content-search">
           <div class="search-icon">
@@ -44,8 +44,8 @@
               fill="none"
               color="#fff"
             >
-              <path d="M14.4121122,14.4121122 L20,20"></path>
-              <circle cx="10" cy="10" r="6"></circle>
+              <path d="M14.4121122,14.4121122 L20,20" />
+              <circle cx="10" cy="10" r="6" />
             </svg>
           </div>
           <div :class="['mInputText',issearchActive ? ' active ':'unactive']">
@@ -57,7 +57,7 @@
               @keyup.enter="search(searchWords)"
               @blur="toBlur()"
               @focus="toFocus()"
-            >
+            />
           </div>
         </div>
         <div class="content-login">
@@ -73,7 +73,7 @@
               data-v-7ba5bd90
               src="https://notre-dame-de-paris-1257401906.cos.ap-chengdu.myqcloud.com/musiclogo.png"
               style="height: 24px; width:24px;"
-            >
+            />
           </div>
           <div class="menu-content">
             <p>XXX音乐</p>
@@ -89,7 +89,7 @@
                 stroke="#ffffff"
                 stroke-miterlimit="10"
                 stroke-width="2"
-              ></path>
+              />
               <path
                 data-name="layer1"
                 fill="none"
@@ -97,7 +97,7 @@
                 stroke-miterlimit="10"
                 stroke-width="2"
                 d="M2 15h32M2 25h32M2 35h32M2 45h16"
-              ></path>
+              />
             </svg>
           </div>
           <div class="menu-content">
@@ -114,7 +114,7 @@
                 stroke="#ffffff"
                 stroke-miterlimit="10"
                 stroke-width="2"
-              ></path>
+              />
               <circle
                 data-name="layer1"
                 cx="32"
@@ -124,7 +124,7 @@
                 stroke="#ffffff"
                 stroke-miterlimit="10"
                 stroke-width="2"
-              ></circle>
+              />
             </svg>
           </div>
           <div class="menu-content">
@@ -144,7 +144,7 @@
                 stroke="#ffffff"
                 stroke-miterlimit="10"
                 stroke-width="2"
-              ></circle>
+              />
               <circle
                 data-name="layer1"
                 cx="32"
@@ -155,7 +155,7 @@
                 stroke="#ffffff"
                 stroke-miterlimit="10"
                 stroke-width="2"
-              ></circle>
+              />
               <path
                 data-name="layer2"
                 d="M53.4 31.1a20.3 20.3 0 0 1-22.1 22.3m15.6-22.2A15 15 0 0 1 31.1 47m1.7-36.4a20.3 20.3 0 0 0-22.2 22.1M32.8 17A15 15 0 0 0 17 32.8"
@@ -163,7 +163,7 @@
                 stroke="#ffffff"
                 stroke-miterlimit="10"
                 stroke-width="2"
-              ></path>
+              />
               <circle
                 data-name="layer1"
                 cx="32"
@@ -173,7 +173,7 @@
                 stroke="#ffffff"
                 stroke-miterlimit="10"
                 stroke-width="2"
-              ></circle>
+              />
             </svg>
           </div>
           <div class="menu-content">
@@ -183,83 +183,149 @@
       </ul>
     </aside>
     <div class="lyricsPage">
-        <div class="closeItem" @click="hiddenLyricPage()">
-          <p>&times;</p>
-        </div>
-        <div class="lyricContent">
-          <div class="leftContent">
-            <div class="topBox">
-              <div class="imgBox">
-                <img :src="albumImgUrl" alt="">
+      <div class="closeItem" @click="hiddenLyricPage()">
+        <p>&times;</p>
+      </div>
+      <div class="lyricContent">
+        <div class="leftContent">
+          <div class="topBox">
+            <div class="imgBox">
+              <img :src="albumImgUrl" alt />
+            </div>
+            <div class="playerControl-progress">
+              <div class="currentProgress"></div>
+            </div>
+            <div class="timeShow">
+              <p class="leftTime">{{currentTime}}</p>
+              <p class="rightTime">{{duration}}</p>
+            </div>
+            <div class="canvasDraw">
+              <canvas></canvas>
+            </div>
+            <div class="songBox">
+              <p>{{name ||""}}</p>
+              <p>{{singer ||""}}</p>
+              <p>{{album ||""}}</p>
+            </div>
+            <div class="btnBox">
+              <div class="previous" @click="previous()">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="#fff"
+                >
+                  <title>previous</title>
+                  <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                  <path d="M0 0h24v24H0z" fill="none" />
+                </svg>
               </div>
-              <div class="playerControl-progress">
-                <div class="currentProgress"></div>
+              <div class="play">
+                <div class="playing" @click="cplay()" v-show="!bool">
+                  <svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                      <title>background</title>
+                      <rect
+                        fill="none"
+                        id="canvas_background"
+                        height="402"
+                        width="582"
+                        y="-1"
+                        x="-1"
+                      />
+                    </g>
+                    <g>
+                      <title>play</title>
+                      <rect
+                        id="svg_3"
+                        height="23.269886"
+                        width="23.529401"
+                        y="12.671068"
+                        x="13.662634"
+                        stroke-width="1.5"
+                        stroke="#000"
+                        fill="#fff"
+                      />
+                      <path id="svg_1" fill="none" d="m0,0l48,0l0,48l-48,0l0,-48z" />
+                      <path
+                        fill="#e82359"
+                        stroke-width="0"
+                        id="svg_2"
+                        d="m24,3.910474c-11.05,0 -20,8.95 -20,20s8.95,20 20,20s20,-8.95 20,-20s-8.95,-20 -20,-20zm-4,29l0,-18l12,9l-12,9z"
+                      />
+                    </g>
+                  </svg>
+                </div>
+                <div class="pause" @click="cpause()" v-show="bool">
+                  <svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                      <title>background</title>
+                      <rect
+                        fill="none"
+                        id="canvas_background"
+                        height="50"
+                        width="50"
+                        y="-1"
+                        x="-1"
+                      />
+                    </g>
+                    <g>
+                      <title>pause</title>
+                      <rect
+                        stroke="null"
+                        id="svg_3"
+                        height="19.111119"
+                        width="15.83829"
+                        y="14.652042"
+                        x="14.584344"
+                        stroke-opacity="null"
+                        stroke-width="null"
+                        fill="#ffffff"
+                      />
+                      <path id="svg_1" fill="none" d="m11.485154,12.376245l24,0l0,24l-24,0l0,-24z" />
+                      <path
+                        stroke="null"
+                        fill="#e82359"
+                        id="svg_2"
+                        d="m23.685191,4.244067c-10.930696,0 -19.801985,8.915646 -19.801985,19.900995s8.871289,19.900995 19.801985,19.900995s19.801985,-8.915646 19.801985,-19.900995s-8.871289,-19.900995 -19.801985,-19.900995zm-1.980199,27.861394l-3.960397,0l0,-15.920796l3.960397,0l0,15.920796zm7.920794,0l-3.960397,0l0,-15.920796l3.960397,0l0,15.920796z"
+                      />
+                    </g>
+                  </svg>
+                </div>
               </div>
-              <div class="timeShow">
-                  <p class="leftTime">{{currentTime}}</p>
-                  <p class="rightTime">{{duration}}</p>
-              </div>
-              <div class="songBox">
-                <p>{{name ||""}}</p>
-                <p>{{singer ||""}}</p>
-                <p>{{album ||""}}</p>
-              </div>
-                               <div class="btnBox">
-                  <div class="previous" @click="previous()">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fff"><title>previous</title><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
-                    </div>
-                    <div class="play">
-                      <div class="playing" @click="cplay()" v-show="!bool">
-                        <svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">
-                            <g>
-                              <title>background</title>
-                              <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
-                            </g>
-                            <g>
-                              <title>play</title>
-                              <rect id="svg_3" height="23.269886" width="23.529401" y="12.671068" x="13.662634" stroke-width="1.5" stroke="#000" fill="#fff"/>
-                              <path id="svg_1" fill="none" d="m0,0l48,0l0,48l-48,0l0,-48z"/>
-                              <path fill="#e82359" stroke-width="0" id="svg_2" d="m24,3.910474c-11.05,0 -20,8.95 -20,20s8.95,20 20,20s20,-8.95 20,-20s-8.95,-20 -20,-20zm-4,29l0,-18l12,9l-12,9z"/>
-                            </g>
-                        </svg>
-                      </div>
-                      <div class="pause" @click="cpause()" v-show="bool">
-                        <svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">
-                          <g>
-                            <title>background</title>
-                            <rect fill="none" id="canvas_background" height="50" width="50" y="-1" x="-1"/>
-                          </g>
-                          <g>
-                            <title>pause</title>
-                            <rect stroke="null" id="svg_3" height="19.111119" width="15.83829" y="14.652042" x="14.584344" stroke-opacity="null" stroke-width="null" fill="#ffffff"/>
-                            <path id="svg_1" fill="none" d="m11.485154,12.376245l24,0l0,24l-24,0l0,-24z"/>
-                            <path stroke="null" fill="#e82359" id="svg_2" d="m23.685191,4.244067c-10.930696,0 -19.801985,8.915646 -19.801985,19.900995s8.871289,19.900995 19.801985,19.900995s19.801985,-8.915646 19.801985,-19.900995s-8.871289,-19.900995 -19.801985,-19.900995zm-1.980199,27.861394l-3.960397,0l0,-15.920796l3.960397,0l0,15.920796zm7.920794,0l-3.960397,0l0,-15.920796l3.960397,0l0,15.920796z"/>
-                          </g>
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="next" @click="next()">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fff"><title>next</title><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
-                    </div>
+              <div class="next" @click="next()">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="#fff"
+                >
+                  <title>next</title>
+                  <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                  <path d="M0 0h24v24H0z" fill="none" />
+                </svg>
               </div>
             </div>
           </div>
-          <div class="rightContent">
-            <div class="lyricsTitle">
-              <h2></h2>
-            </div>
-            <div class="lyricsContent">
-              <p v-for="Lyric in lyric">{{Lyric[1]}}</p>
-            </div>
+        </div>
+        <div class="rightContent">
+          <div class="lyricsTitle">
+            <h2></h2>
+          </div>
+          <div class="lyricsContent">
+            <p v-for="Lyric in lyric">{{Lyric[1]}}</p>
           </div>
         </div>
+      </div>
     </div>
     <diV class="playlistpage" v-show="page">
       <router-view></router-view>
     </diV>
     <div class="player-bar" v-show="show">
       <div class="player-songImg" @click="showLyricPage()">
-        <img class="rotation" :src="albumImgUrl" alt>
+        <img class="rotation" :src="albumImgUrl" alt />
       </div>
       <div class="player-control">
         <div class="playerControl-progress" @click.stop="updateProgress($event)">
@@ -291,8 +357,8 @@
                 fill="#fff"
               >
                 <title>previous</title>
-                <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path>
-                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                <path d="M0 0h24v24H0z" fill="none" />
               </svg>
             </div>
             <div class="play">
@@ -300,7 +366,14 @@
                 <svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">
                   <g>
                     <title>background</title>
-                    <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"></rect>
+                    <rect
+                      fill="none"
+                      id="canvas_background"
+                      height="402"
+                      width="582"
+                      y="-1"
+                      x="-1"
+                    />
                   </g>
                   <g>
                     <title>play</title>
@@ -313,14 +386,14 @@
                       stroke-width="1.5"
                       stroke="#000"
                       fill="#fff"
-                    ></rect>
-                    <path id="svg_1" fill="none" d="m0,0l48,0l0,48l-48,0l0,-48z"></path>
+                    />
+                    <path id="svg_1" fill="none" d="m0,0l48,0l0,48l-48,0l0,-48z" />
                     <path
                       fill="#e82359"
                       stroke-width="0"
                       id="svg_2"
                       d="m24,3.910474c-11.05,0 -20,8.95 -20,20s8.95,20 20,20s20,-8.95 20,-20s-8.95,-20 -20,-20zm-4,29l0,-18l12,9l-12,9z"
-                    ></path>
+                    />
                   </g>
                 </svg>
               </div>
@@ -328,7 +401,7 @@
                 <svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">
                   <g>
                     <title>background</title>
-                    <rect fill="none" id="canvas_background" height="50" width="50" y="-1" x="-1"></rect>
+                    <rect fill="none" id="canvas_background" height="50" width="50" y="-1" x="-1" />
                   </g>
                   <g>
                     <title>pause</title>
@@ -342,14 +415,14 @@
                       stroke-opacity="null"
                       stroke-width="null"
                       fill="#ffffff"
-                    ></rect>
-                    <path id="svg_1" fill="none" d="m11.485154,12.376245l24,0l0,24l-24,0l0,-24z"></path>
+                    />
+                    <path id="svg_1" fill="none" d="m11.485154,12.376245l24,0l0,24l-24,0l0,-24z" />
                     <path
                       stroke="null"
                       fill="#e82359"
                       id="svg_2"
                       d="m23.685191,4.244067c-10.930696,0 -19.801985,8.915646 -19.801985,19.900995s8.871289,19.900995 19.801985,19.900995s19.801985,-8.915646 19.801985,-19.900995s-8.871289,-19.900995 -19.801985,-19.900995zm-1.980199,27.861394l-3.960397,0l0,-15.920796l3.960397,0l0,15.920796zm7.920794,0l-3.960397,0l0,-15.920796l3.960397,0l0,15.920796z"
-                    ></path>
+                    />
                   </g>
                 </svg>
               </div>
@@ -363,8 +436,8 @@
                 fill="#fff"
               >
                 <title>next</title>
-                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path>
-                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                <path d="M0 0h24v24H0z" fill="none" />
               </svg>
             </div>
           </div>
@@ -384,8 +457,8 @@
                   >
                     <path
                       d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"
-                    ></path>
-                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    />
+                    <path d="M0 0h24v24H0z" fill="none" />
                   </svg>
                 </div>
                 <div class="volumeOff">
@@ -398,8 +471,8 @@
                   >
                     <path
                       d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"
-                    ></path>
-                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    />
+                    <path d="M0 0h24v24H0z" fill="none" />
                   </svg>
                 </div>
               </div>
@@ -427,14 +500,14 @@
               >
                 <metadata>
                   <sfw xmlns="&ns_sfw;">
-                    <slices></slices>
+                    <slices />
                     <sliceSourceBounds
                       width="505"
                       height="984"
                       bottomLeftOrigin="true"
                       x="0"
                       y="-120"
-                    ></sliceSourceBounds>
+                    />
                   </sfw>
                 </metadata>
                 <g>
@@ -443,22 +516,22 @@
                       <path
                         d="M12,24C5.4,24,0,18.6,0,12S5.4,0,12,0s12,5.4,12,12S18.6,24,12,24z M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10s10-4.5,10-10
                                 S17.5,2,12,2z"
-                      ></path>
+                      />
                     </g>
                   </g>
                   <g>
                     <g>
-                      <circle cx="7" cy="12" r="2"></circle>
+                      <circle cx="7" cy="12" r="2" />
                     </g>
                   </g>
                   <g>
                     <g>
-                      <circle cx="12" cy="12" r="2"></circle>
+                      <circle cx="12" cy="12" r="2" />
                     </g>
                   </g>
                   <g>
                     <g>
-                      <circle cx="17" cy="12" r="2"></circle>
+                      <circle cx="17" cy="12" r="2" />
                     </g>
                   </g>
                 </g>
@@ -483,7 +556,7 @@
           v-for="playlist in playlists"
           @click="audioplay(playlist.id,playlist.name,playlist.singer,playlist.album,playlist.albumImgUrl)"
         >
-          <img :src="playlist.albumImgUrl">
+          <img :src="playlist.albumImgUrl" />
           <p>{{playlist.name||"name"}}</p>
           <p>{{playlist.singer||"singer"}}</p>
         </div>
@@ -491,16 +564,22 @@
     </div>
     <div class="login">
       <div class="loginTxt">
-         <input type="text" placeholder="用户名" v-model="userName">
-        <input type="text" placeholder="网易云id" v-model="userUid">
+        <input type="text" placeholder="用户名" v-model="userName" />
+        <input type="text" placeholder="网易云id" v-model="userUid" />
         <p>{{errmsg}}</p>
         <button @click="getData(userName,userUid)">Login</button>
       </div>
     </div>
     <div class="toggleBar" @click="toggleBar">
-        <div class="toggleBarIcon">
-          <svg data-v-62547525="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path data-v-62547525="" fill="#fff" d="M427 234.625H167.296l119.702-119.702L256 85 85 256l171 171 29.922-29.924-118.626-119.701H427v-42.75z"></path></svg>
-        </div>
+      <div class="toggleBarIcon">
+        <svg data-v-62547525 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path
+            data-v-62547525
+            fill="#fff"
+            d="M427 234.625H167.296l119.702-119.702L256 85 85 256l171 171 29.922-29.924-118.626-119.701H427v-42.75z"
+          />
+        </svg>
+      </div>
     </div>
     <audio id="player" autoplay="autoplay" @canplay="getDuration" @timeupdate="updateTime"></audio>
   </div>
@@ -520,7 +599,7 @@ export default {
       album: "",
       playlists: [],
       bool: false,
-      num:'',
+      num: "",
       loginshow: true,
       lyrics: "",
       lyric: "",
@@ -534,8 +613,9 @@ export default {
       page: true,
       userId: "",
       issearchActive: false,
-      userName:'',
-      userUid:''
+      userName: "",
+      userUid: "",
+      mediaElementSource:false
     };
   },
   props: {
@@ -545,9 +625,9 @@ export default {
     }
   },
   methods: {
-    toggleBar(){
-      var playerBar = document.querySelector('.player-bar');
-      playerBar.classList.toggle('togglePlayerBar');
+    toggleBar() {
+      var playerBar = document.querySelector(".player-bar");
+      playerBar.classList.toggle("togglePlayerBar");
     },
     toFocus(input) {
       this.issearchActive = true;
@@ -555,7 +635,7 @@ export default {
     toBlur(input) {
       this.issearchActive = false;
     },
-    getData(uname,uid) {
+    getData(uname, uid) {
       this.errmsg = "";
       var obj = {
         name: uname,
@@ -567,18 +647,18 @@ export default {
           if (res.data.type == "success") {
             alert(`${res.data.value}登陆成功`);
             this.loginAnimation();
-            this.userId=res.data.uid;
+            this.userId = res.data.uid;
             this.$store.dispatch("setLoginstatus", res.data.value);
             this.$router.push({ name: "home" });
-          } else if (res.data.type='err') {
-            this.register(uname,uid);
+          } else if ((res.data.type = "err")) {
+            this.register(uname, uid);
           } else {
             this.errmsg = res.data.value;
           }
         }
       });
     },
-    register(uname,uid) {
+    register(uname, uid) {
       this.errmsg = "";
       var obj = {
         name: uname,
@@ -588,7 +668,7 @@ export default {
         if (res.status == 200) {
           if (res.data.type == "success") {
             alert(`注册成功`);
-            this.userId=res.data.uid;
+            this.userId = res.data.uid;
             this.loginAnimation();
             this.$store.dispatch("setLoginstatus", res.data.value);
             this.$router.push({ name: "home" });
@@ -715,13 +795,14 @@ export default {
       this.$http
         .get(`https://music.api.umcoder.com/song/url?id=${songId}`)
         .then(res => {
-        // if (res.data.data[0].url.indexOf("https") == -1){
-        //     this.$store.state.albumImgUrl = this.$store.state.albumImgUrl.replace(
-        //   "http",
-        //   "https"
-        // );
-        // }else
-        audio.src = res.data.data[0].url.replace("http", "https");
+          // if (res.data.data[0].url.indexOf("https") == -1){
+          //     this.$store.state.albumImgUrl = this.$store.state.albumImgUrl.replace(
+          //   "http",
+          //   "https"
+          // );
+          // }else
+          audio.src = res.data.data[0].url.replace("http", "https");
+          this.AudioVisualize();
         });
       // this.cplay()
     },
@@ -781,11 +862,11 @@ export default {
     },
 
     previous() {
-      if(this.num ===''){
-        this.num=this.playlists.length-1;
+      if (this.num === "") {
+        this.num = this.playlists.length - 1;
       }
-     if (this.$store.state.albumImgUrl.indexOf("https") == -1){
-          this.$store.state.albumImgUrl = this.$store.state.albumImgUrl.replace(
+      if (this.$store.state.albumImgUrl.indexOf("https") == -1) {
+        this.$store.state.albumImgUrl = this.$store.state.albumImgUrl.replace(
           "http",
           "https"
         );
@@ -793,7 +874,7 @@ export default {
       if (this.num == 0) {
         this.num = this.playlists.length - 1;
         // console.log('this.num置为最大');
-      } else{
+      } else {
         --this.num;
         // console.log('--this.num')
       }
@@ -811,23 +892,22 @@ export default {
     },
 
     next() {
-      if(this.num ===''){
-        this.num=this.playlists.length-1;
+      if (this.num === "") {
+        this.num = this.playlists.length - 1;
       }
-      if (this.$store.state.albumImgUrl.indexOf("https") == -1){
-          this.$store.state.albumImgUrl = this.$store.state.albumImgUrl.replace(
+      if (this.$store.state.albumImgUrl.indexOf("https") == -1) {
+        this.$store.state.albumImgUrl = this.$store.state.albumImgUrl.replace(
           "http",
           "https"
         );
       }
       // console.log(this.num);
-      if (this.num == this.playlists.length-1){
+      if (this.num == this.playlists.length - 1) {
         this.num = 0;
         // console.log('this.num置为0');
-      }
-      else{
-          ++this.num;
-          // console.log('this.num++');
+      } else {
+        ++this.num;
+        // console.log('this.num++');
       }
 
       this.name = this.playlists[this.num].name;
@@ -860,7 +940,7 @@ export default {
           }
         })
         .catch(err => {
-         return err
+          return err;
         });
     },
 
@@ -900,23 +980,63 @@ export default {
         return a[0] - b[0];
       });
       this.lyric = result;
+    },
+    AudioVisualize() {
+            const myAudio = document.querySelector('audio');
+                  myAudio.crossOrigin='anonymous'
+            const canvas = document.querySelector('canvas');
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+            const analyser = audioCtx.createAnalyser()
+            analyser.fftSize = 1024;
+            var ctx = canvas.getContext('2d')
+            // 获取声音源
+            if(!this.mediaElementSource){
+                this.mediaElementSource =!this.mediaElementSource;
+                var W = canvas.width = 400;
+                var H = canvas.height = 100;
+                var ctx = canvas.getContext('2d')
+                const source = audioCtx.createMediaElementSource(myAudio)
+                source.connect(analyser)
+                source.connect(audioCtx.destination)
+            }
+            const bufferLength = analyser.fftSize
+            const dataArray = new Uint8Array(bufferLength)
+            const draw2 = () => {
+              analyser.getByteFrequencyData(dataArray)
+              ctx.clearRect(0, 0, W, H)
+              ctx.fillStyle = 'rgb(15,58,93)'
+              ctx.fillRect(0, 0, W, H)
+              const barWidth = (W / bufferLength) * 30
+              let barHeight
+              let x = 0
+              
+              for (let i = 0; i < bufferLength; i++) {
+                  barHeight = dataArray[i] / 2
+                  ctx.fillStyle = `rgb(${barHeight + 121},199,149)`
+                  ctx.fillRect(x, H - barHeight, barWidth, barHeight)
+                  x += barWidth + 1
+              }
+                  requestAnimationFrame(draw2)
+            }
+            draw2()
+            
     }
   },
 
   beforeMount() {
     console.info("Welcome soulMusic,hava a good time");
   },
-
+  mounted() {},
   watch: {
     getSongId(curval, oldval) {
       // console.log(curval,oldval);
-      if (this.$store.state.albumImgUrl.indexOf("https") == -1){
-          this.$store.state.albumImgUrl = this.$store.state.albumImgUrl.replace(
+      if (this.$store.state.albumImgUrl.indexOf("https") == -1) {
+        this.$store.state.albumImgUrl = this.$store.state.albumImgUrl.replace(
           "http",
           "https"
         );
       }
-        this.$store.state.historylists.push({
+      this.$store.state.historylists.push({
         id: `${this.$store.state.id}`,
         name: `${this.$store.state.songName}`,
         singer: `${this.$store.state.singer}`,
@@ -1113,7 +1233,7 @@ nav .content .content-logo {
   flex-direction: row;
   vertical-align: center;
   align-items: center;
-  transition:0.4s;
+  transition: 0.4s;
   z-index: 10;
 }
 .player-bar .player-songImg {
@@ -1189,7 +1309,7 @@ nav .content .content-logo {
   width: auto;
 }
 
-.player-bar .player-control .playerControl-content .songContent .songName{
+.player-bar .player-control .playerControl-content .songContent .songName {
   margin-top: 10px;
 }
 .player-bar .player-control .playerControl-content .songContent .singer,
@@ -1297,7 +1417,7 @@ nav .content .content-logo {
 .show {
   right: 10px;
   z-index: 17;
-  box-shadow: 1px 1px 10px #b3d4fc54
+  box-shadow: 1px 1px 10px #b3d4fc54;
 }
 .playList .playListTitle h2 {
   /* position: absolute; */
@@ -1345,37 +1465,37 @@ nav .content .content-logo {
 .loginAnimation {
   position: fixed;
   display: block;
-  height:100%;
-  width:100%;
-  z-index:100;
-  background:rgba(0, 0, 0, 0.7);
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.7);
 }
- .loginAnimation .loginTxt{
-   display: flex;
-   flex-direction: column;
-   vertical-align: center; 
-   align-items: center;
-   padding:100px;
- }
-  .loginAnimation .loginTxt input{
-    margin:5px 0;
-    height:30px;
-    width:160px;
-    outline: none;
-    list-style: none;
-    border:none;
-    text-indent: 16px;
-  }
-.loginAnimation .loginTxt button{
-   /* background:#b4c7e2; */
-   border:1px solid #adafb2;
-   margin-top:15px;
-   height:30px;
-   width:160px;
-   transition:0.4s;
+.loginAnimation .loginTxt {
+  display: flex;
+  flex-direction: column;
+  vertical-align: center;
+  align-items: center;
+  padding: 100px;
 }
-.loginAnimation .loginTxt button:hover{
-     background:rgba(201,206,213,.2);
+.loginAnimation .loginTxt input {
+  margin: 5px 0;
+  height: 30px;
+  width: 160px;
+  outline: none;
+  list-style: none;
+  border: none;
+  text-indent: 16px;
+}
+.loginAnimation .loginTxt button {
+  /* background:#b4c7e2; */
+  border: 1px solid #adafb2;
+  margin-top: 15px;
+  height: 30px;
+  width: 160px;
+  transition: 0.4s;
+}
+.loginAnimation .loginTxt button:hover {
+  background: rgba(201, 206, 213, 0.2);
 }
 .closeItem {
   position: absolute;
@@ -1399,113 +1519,112 @@ nav .content .content-logo {
   left: 8%;
 }
 
-.lyricsPage{
+.lyricsPage {
   position: absolute;
-  height:0;
-  width:100%;
-  background:rgb(15,58,93);
-  z-index:11;
-  bottom:0;
-  overflow-y:auto;
+  height: 0;
+  width: 100%;
+  background: rgb(15, 58, 93);
+  z-index: 11;
+  bottom: 0;
+  overflow-y: auto;
   transition: 0.6s;
 }
-.lyricsPage .lyricContent{
+.lyricsPage .lyricContent {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 .lyricsPage .leftContent,
-.lyricsPage .rightContent{
-  height:100%;
-  width:50%;
+.lyricsPage .rightContent {
+  height: 100%;
+  width: 50%;
   overflow: hidden;
 }
-.lyricsPage .leftContent{
-   display: flex;
+.lyricsPage .leftContent {
+  display: flex;
   flex-direction: column;
   vertical-align: center;
- padding:100px 0 0 0;
+  padding: 100px 0 0 0;
 }
-.lyricsPage .rightContent{
-       padding:60px 0 0 0;
-      -webkit-mask-image: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0) 0,
-      rgba(255, 255, 255, 0.6) 15%,
-      rgba(255, 255, 255, 1) 25%,
-      rgba(255, 255, 255, 1) 75%,
-      rgba(255, 255, 255, 0.6) 85%,
-      rgba(255, 255, 255, 0) 100%
-    );
+.lyricsPage .rightContent {
+  padding: 60px 0 0 0;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.6) 15%,
+    rgba(255, 255, 255, 1) 25%,
+    rgba(255, 255, 255, 1) 75%,
+    rgba(255, 255, 255, 0.6) 85%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
-.lyricsPage .leftContent .topBox{
-  width:100%;
+.lyricsPage .leftContent .topBox {
+  width: 100%;
   display: flex;
   flex-direction: column;
   vertical-align: center;
   align-items: center;
-  padding:10px;
+  padding: 10px;
 }
-.lyricsPage .leftContent .btnBox{
+.lyricsPage .leftContent .btnBox {
   display: flex;
   flex-direction: column;
   vertical-align: center;
   align-items: center;
 }
- .lyricsPage .leftContent .btnBox svg{
-   margin:5px;
-   cursor: pointer;
- }
-.lyricsPage .leftContent .topBox p{
-  margin-top:10px;
-  font-size:20px;
+.lyricsPage .leftContent .btnBox svg {
+  margin: 5px;
+  cursor: pointer;
 }
-.lyricsPage .leftContent .topBox .imgBox{
-  height:350px;
-  width:350px;
-  margin:auto;
+.lyricsPage .leftContent .topBox p {
+  margin-top: 10px;
+  font-size: 20px;
 }
-.lyricsPage .leftContent .topBox .imgBox img{
+.lyricsPage .leftContent .topBox .imgBox {
+  height: 350px;
+  width: 350px;
+  margin: auto;
+}
+.lyricsPage .leftContent .topBox .imgBox img {
   box-shadow: 0.2rem 0.2rem 1rem #fff;
 }
-.lyricsPage .playerControl-progress{
-  height:3px;
-  width:60%;
-  margin:40px 0 0 0;
-  background:rgb(54,75,100);
+.lyricsPage .playerControl-progress {
+  height: 3px;
+  width: 60%;
+  margin: 40px 0 0 0;
+  background: rgb(54, 75, 100);
 }
-.lyricsPage .playerControl-progress .currentProgress{
-  height:100%;
-  width:0;
-  background:rgb(218,15,71);
+.lyricsPage .playerControl-progress .currentProgress {
+  height: 100%;
+  width: 0;
+  background: rgb(218, 15, 71);
 }
-.lyricsPage  .timeShow{
+.lyricsPage .timeShow {
   display: flex;
-  width:60%;
+  width: 60%;
   flex-direction: row;
   vertical-align: center;
 }
-.lyricsPage  .timeShow .leftTime{
-  width:50%;
+.lyricsPage .timeShow .leftTime {
+  width: 50%;
   text-align: left;
 }
-.lyricsPage  .timeShow .rightTime{
-  width:50%;
+.lyricsPage .timeShow .rightTime {
+  width: 50%;
   text-align: right;
 }
-.lyricsPage .lyricsContent{
-   transition: 0.4s;
+.lyricsPage .lyricsContent {
+  transition: 0.4s;
 }
-.lyricsPage .lyricsContent p{
-  margin:6px;
+.lyricsPage .lyricsContent p {
+  margin: 6px;
 }
-.lyricsPage .leftContent .btnBox{
+.lyricsPage .leftContent .btnBox {
   flex-direction: row;
 }
- .menu .logoShow{
+.menu .logoShow {
   display: none;
 }
-
 
 .lyricsPage .music-lyric p {
   margin: 6px;
@@ -1772,8 +1891,8 @@ button:-moz-focusring {
   letter-spacing: 1px;
   font-weight: 500;
 }
-.singer p{
-color: #b9b0b0;
+.singer p {
+  color: #b9b0b0;
 }
 .singer-name {
   color: rgb(189, 189, 189);
@@ -1796,32 +1915,32 @@ color: #b9b0b0;
 .unactive {
   border: none;
 }
-.logoShow{
+.logoShow {
   display: none;
 }
-.toggleBar{
+.toggleBar {
   position: fixed;
-  bottom:30px;
-  right:2%;
-  height:36px;
-  width:36px;
+  bottom: 30px;
+  right: 2%;
+  height: 36px;
+  width: 36px;
   cursor: pointer;
-  z-index:10;
+  z-index: 10;
 }
-.togglePlayerBar{
-  width:0%;
+.togglePlayerBar {
+  width: 0%;
 }
 @media only screen and (max-width: 767px) {
   .player-bar .player-songImg {
-  height: 80px;
-  width: 96px;
-  cursor: pointer;
-}
-.toggleBar{
-  display:none; 
-}
-  .menu .logoShow{
-    display:block;
+    height: 80px;
+    width: 96px;
+    cursor: pointer;
+  }
+  .toggleBar {
+    display: none;
+  }
+  .menu .logoShow {
+    display: block;
   }
   .lyricsPage .rightContent {
     right: 0;
@@ -1835,8 +1954,8 @@ color: #b9b0b0;
     text-align: center;
     padding: 50px 0 0 0;
   }
-  .lyricsPage .leftContent .topBox{
-    top: 0
+  .lyricsPage .leftContent .topBox {
+    top: 0;
   }
   .player-bar .player-control .playerControl-content .controlContent .lyric,
   .player-bar .player-control .playerControl-content .controlShow,
@@ -1883,9 +2002,9 @@ color: #b9b0b0;
     /* z-index: 89999999999999999; */
     right: 0;
   }
-  .content .content-search .mInputText{
-    height:100%;
-    width:100%;
+  .content .content-search .mInputText {
+    height: 100%;
+    width: 100%;
     text-indent: 8px;
   }
   .content .content-search {
@@ -1971,45 +2090,48 @@ color: #b9b0b0;
   .homeContentHotAlbum {
     margin: 30px 0 10px 0;
   }
-    .logoShow{
-  display: block;
-}
-.content-logo{
-  display:none;
-}
-.lyricsPage .leftContent .topBox p:nth-child(3){
-  display: none;
-}
-.player-bar{
+  .logoShow {
+    display: block;
+  }
+  .content-logo {
+    display: none;
+  }
+  .lyricsPage .leftContent .topBox p:nth-child(3) {
+    display: none;
+  }
+  .player-bar {
     background: #113a5d;
+  }
+  .player-bar .player-control .playerControl-content .songContent {
+    width: 30%;
+    margin: 0 10px;
+  }
+  .player-bar .player-control .playerControl-content .controlContent {
+    width: 50%;
+    margin: 0 10px;
+  }
+  .player-bar .player-songImg {
+    width: 120px;
+  }
+  .player-songImg img {
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+  }
+  @-webkit-keyframes rotation {
+    from {
+      -webkit-transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+  .rotation {
+    -webkit-transform: rotate(360deg);
+    animation: rotation 3s linear infinite;
+    -moz-animation: rotation 3s linear infinite;
+    -webkit-animation: rotation 3s linear infinite;
+    -o-animation: rotation 3s linear infinite;
+  }
 }
-.player-bar .player-control .playerControl-content .songContent{
-  width: 30%;
-  margin: 0 10px
-}
-.player-bar .player-control .playerControl-content .controlContent{
-  width: 50%;
-  margin: 0 10px;
-}
-.player-bar .player-songImg{
-  width:120px;
-}
-.player-songImg img{
-  height:70px;
-  width:70px;
-  border-radius: 50%;
-}
-@-webkit-keyframes rotation{
-from {-webkit-transform: rotate(0deg);}
-to {-webkit-transform: rotate(360deg);}
-}
-.rotation{
--webkit-transform: rotate(360deg);
-animation: rotation 3s linear infinite;
--moz-animation: rotation 3s linear infinite;
--webkit-animation: rotation 3s linear infinite;
--o-animation: rotation 3s linear infinite;
-}
-}
-
 </style>

@@ -26,7 +26,7 @@
 ![歌单页](https://i.loli.net/2019/06/09/5cfcb36c2604f27326.png)
 ![歌词页](https://i.loli.net/2019/06/09/5cfcb2eff41b890231.png)
 ![移动端页面](https://i.loli.net/2019/06/17/5d072e81a2ddb48287.png)
-
+![增加效果](https://img.umcoder.com/imgs/2019/09/52b8ab86dc325acc.png)
 ---
 
 

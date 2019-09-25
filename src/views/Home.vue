@@ -5,7 +5,7 @@
       <h2>{{topAlbumTiltle || "waiting"}}</h2>
       <div class="albumImgs" id="m1">
         <div class="albumImg" v-for="topAlbum in topAlbums" @click="album(topAlbum.id)">
-          <img src="../assets/logo.png" :dataSrc="topAlbum.coverImgUrl" alt='资源加载失败'>
+          <img src="../assets/logo.png" :dataSrc="topAlbum.coverImgUrl.replace('http','https')" alt='资源加载失败'>
           <div class="playSvg">
             <svg data-v-7ba5bd90 width="48" height="48" xmlns="http://www.w3.org/2000/svg">
               <g data-v-7ba5bd90>

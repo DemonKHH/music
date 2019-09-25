@@ -9,6 +9,7 @@ let axiosLoading=function (axios,requrl,callback){
       return Promise.reject(error)
     })
     axiosCreate.interceptors.response.use(response => {
+
         //对响应数据做些事，比如说把loading动画关掉
         // setTimeout(()=>{
         //   var loadingAll = document.getElementsByClassName('loading')
